@@ -5,6 +5,7 @@ import {engine} from 'express-handlebars';
 import session from 'express-session';
 
 import {router as vistasRouter} from './routes/viewsRouter.js'
+import {router as sessionsRouter} from './routes/sessionsRouter.js'
 import { connDB } from './connDB.js';
 import { config } from './config/config.js';
 
@@ -14,12 +15,14 @@ const app=express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-//estos dos middlewares sirven para procesar información compleja que llegue desde la request, desde el cliente
+//estos dos últimos middlewares sirven para procesar información compleja que llegue desde la request, desde el cliente
 app.use(session({
     secret:config.SECRET_SESSION,
     resave: true,
     saveUninitialized: true,
 }))
+
+app.use(express.static('./src/public'))
 
 app.engine('handlebars', engine({
 runtimeOptions: {
@@ -32,12 +35,8 @@ app.set('views', path.join(__dirname,'/views'));
 
 app.use(express.static(path.join(__dirname,'/public')));
 
+app.use('/api/sessions', sessionsRouter)
 app.use('/', vistasRouter)
-
-app.get('/',(req,res)=>{
-    res.setHeader('Content-Type','text/html');
-    res.status(200).render('home');
-})
 
 const server=app.listen(PORT,()=>{
     console.log(`Server escuchando en puerto ${PORT}`);

@@ -1,8 +1,24 @@
 import { Router } from 'express';
-export const router=Router()
+import { auth } from '../middleware/auth.js';
 
-router.get('/',(req,res)=>{
+export const router = Router()
 
-    res.setHeader('Content-Type','application/json')
-    res.status(200).json({})
+router.get('/', (req, res) => {
+
+    res.status(200).render('home')
+})
+
+router.get('/registro', (req, res) => {
+
+    res.status(200).render('registro')
+})
+
+router.get('/login', (req, res) => {
+
+    res.status(200).render('login')
+})
+
+router.get('/perfil', auth, (req, res) => {
+
+    res.status(200).render('perfil')
 })
