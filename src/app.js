@@ -3,7 +3,7 @@ import path from 'path';
 import express from 'express';
 import {engine} from 'express-handlebars';
 import session from 'express-session';
-
+import { UsuariosManagerMongo } from './dao/usuariosManagerMONGO.js';
 import {router as vistasRouter} from './routes/viewsRouter.js'
 import {router as sessionsRouter} from './routes/sessionsRouter.js'
 import { connDB } from './connDB.js';
@@ -37,6 +37,8 @@ app.use(express.static(path.join(__dirname,'/public')));
 
 app.use('/api/sessions', sessionsRouter)
 app.use('/', vistasRouter)
+
+UsuariosManagerMongo.crearAdminInicial();
 
 const server=app.listen(PORT,()=>{
     console.log(`Server escuchando en puerto ${PORT}`);

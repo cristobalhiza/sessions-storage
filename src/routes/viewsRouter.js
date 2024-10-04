@@ -5,20 +5,22 @@ export const router = Router()
 
 router.get('/', (req, res) => {
 
-    res.status(200).render('home')
+    res.status(200).render('home', {isLogin:req.session.usuario})
 })
 
 router.get('/registro', (req, res) => {
 
-    res.status(200).render('registro')
+    res.status(200).render('registro', {isLogin:req.session.usuario})
 })
 
 router.get('/login', (req, res) => {
 
-    res.status(200).render('login')
+    res.status(200).render('login', {isLogin:req.session.usuario})
 })
 
 router.get('/perfil', auth, (req, res) => {
-
-    res.status(200).render('perfil')
+    if (!req.session.usuario) {
+        return res.redirect('/login');
+    }
+    res.status(200).render('perfil', { isLogin: req.session.usuario });
 })
